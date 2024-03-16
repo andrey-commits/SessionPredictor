@@ -9,6 +9,7 @@ from .resolvers.resolver_repository import RepositoryResolver
 from .executors.executor_label import LabelExecutor
 from .executors.executor_delete import DeleteExecutor
 from .executors.executor_session_data import DataExecutor
+from .forms import SessionForm
 
 
 def index(request):
@@ -95,4 +96,28 @@ def loaddata(request):
     except:
         return redirect('hauptview', errordata = 1)
     return redirect('hauptview',errordata = 0)
+
+def sessionexecutor(request):
+    operation =""
+    form = SessionForm()
+    if(request.POST.get("operation_session")=="add"):
+        operation = "Добавить сессию"
+    if (request.POST.get("operation_session") == "redact"):
+        operation = "Изменить сессию"
+        repositoryResolver = RepositoryResolver()
+        repository = repositoryResolver.GetHandler('sessions')
+        session = repository.GetValue(request.POST.get('select-session-id'))
+        form = SessionForm(initial={'label': session.label,
+                                    'visit_number': session.visit_number,
+                                    'utm_source': session.utm_source,
+                                    'utm_medium': session.utm_medium,
+                                    'utm_campaign': session.utm_campaign,
+                                    'utm_keyword': session.utm_keyword,
+                                    'device_brand': session.device_brand,
+                                    'device_screen_resolution': session.device_screen_resolution,
+                                    'geo_city': session.geo_city,
+                                    'session_status': session.session_status})
+    data = {"form" : form,
+            "operation" : operation }
+    return TemplateResponse(request,"SessionView.html",data)
 

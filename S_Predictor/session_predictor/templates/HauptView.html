@@ -219,11 +219,17 @@
               <button type="button" class="btn btn-outline-secondary remotemenu">Предикция выборки</button>
             </li>
             <li>
-              <button type="button" class="btn btn-outline-secondary remotemenu">Добавить сессию</button>
+              <form method="post" action="sessionexecutor/">
+                {% csrf_token %}
+              <input name="operation_session" type="hidden" value="add">
+              <button type="submit" class="btn btn-outline-secondary remotemenu">Добавить сессию</button>
+              </form>
             </li>
             <li>
-              <form method="post" action="">
-              <input id="select-session" type="hidden">
+              <form method="post" action="sessionexecutor/">
+                {% csrf_token %}
+              <input id="select-session" name="select-session-id" type="hidden">
+              <input name="operation_session" type="hidden" value="redact">
               <button id="redact-session" type="submit" class="btn btn-outline-secondary remotemenu" disabled>Редактировать сессию</button>
               </form>
             </li>

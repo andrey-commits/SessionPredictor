@@ -25,3 +25,6 @@ class RepositorySession(AbstractRepository):
             sortparameters.remove("-metka")
         sessions = sessions.filter(**filterparameters).order_by(*sortparameters)
         return sessions
+    def GetValue(self,key):
+        session = Session.objects.get(id=key)
+        return session

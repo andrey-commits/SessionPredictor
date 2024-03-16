@@ -7,3 +7,6 @@ class AbstractRepository:
 
     def GetModifityValues(self):
         pass
+
+    def GetValue(self,key):
+        pass
