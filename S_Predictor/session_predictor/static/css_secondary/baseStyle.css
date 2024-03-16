@@ -1,0 +1,25 @@
+html
+{
+min-height:100%;
+position: relative;
+overflow-x:none;
+width: 100%;
+top:0px;
+}
+
+body
+{
+overflow-x:hidden;
+}
+
+footer
+{
+position: absolute;
+bottom: 0;
+}
+
+
+
+
+
+

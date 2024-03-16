@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Предиктор клиентских сессий</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css_secondary/baseStyle.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css_secondary/tableStyle.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css_secondary/labelStyle.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css_secondary/buttonStyle.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css_secondary/listStyle.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css_secondary/inputStyle.css' %}"/>
+</head>
+<body>
+{% if errordata == 1 %}
+<div class="alert alert-warning" role="alert">
+  "Внимание!!! Файл данных не соответствует схеме чтения предиктора."
+</div>
+{% endif %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col w-100 h-40 bg-primary text-white">
+            <ul class="header_ul">
+            <li><h3>Предиктор клиентских сессий сервиса "СберАвтоподписка"</h3></li>
+                <li>Выполнил: студент курса "Введение в Data Science" Кузаков Андрей</li>
+                <li>Куратор: Ахметзянов Айрат</li>
+                <li>Учебная онлайн-платформа: Scillbox</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <nav class="navbar navbar-dark">
+            <div class="container-fluid justify-content-start">
+                <button onclick="location.href='{% url 'home' %}'" class="btn btn-outline-primary basemenu" type="button">Данные</button>
+                <button onclick="location.href='{% url 'roc_aucview' %}'" class="btn btn-outline-primary basemenu" type="button">Метрика</button>
+                <button onclick="location.href='{% url 'journalview' %}'" class="btn btn-outline-primary basemenu" type="button">Журнал</button>
+            </div>
+        </nav>
+        <hr/>
+    </div>
+    <div class="row">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+<footer class="container-fluid w-100 h-60 bg-primary text-white">
+            <ul class="header_ul">
+            <li class="footer_li"><p>© Кузаков А.С.</p></li>
+            <li class="footer_li"><p>e-mail: rangaid@mail.ru</p></li>
+            <li class="footer_li"><p>2024г.</p></li>
+            </ul>
+    </footer>
+</body>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+{% block interactive_scripts %}
+{% endblock interactive_scripts %}
+</html>

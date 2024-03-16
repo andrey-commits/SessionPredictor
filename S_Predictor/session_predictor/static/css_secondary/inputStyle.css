@@ -1,0 +1,23 @@
+input
+{
+font-size:12px !important;
+height:24px;
+}
+
+input[type="date"]
+{
+padding-top:2px;
+}
+
+input::placeholder
+{
+font-size:12px;
+}
+
+input[name="labeldata"]
+{
+width:200px;
+border:none;
+}
+
+

@@ -1,0 +1,35 @@
+button
+{
+font-size:12px !important;
+}
+
+.filter_button
+{
+padding-left:10px;
+}
+
+.basemenu
+{
+margin-left:20px;
+}
+
+.header_session
+{
+border:none;
+margin:0;
+background: white;
+}
+
+.header_session:hover
+{
+background: #3B71CA;
+}
+
+.remotemenu
+{
+margin: 2px 0;
+}
+
+
+
+
