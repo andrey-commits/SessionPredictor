@@ -36,6 +36,8 @@ class JournalNote(models.Model):
         db_table = "journalnotes"
     id = models.AutoField(primary_key = True)
     session_id = models.IntegerField(blank = False)
+    session_label = models.TextField(blank=True, null=True)
+    session_date = models.DateField()
     date = models.DateField(auto_now_add=True)
-    operation = models.TextField(default="сессия не установлена")
+    operation = models.TextField(default="операция не установлена")
 

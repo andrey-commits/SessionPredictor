@@ -5,7 +5,7 @@ from ..models import Session
 class LabelExecutor(AbstractExecutor):
 
     def Execute(self,object,label):
-        Session.objects.filter(id = object).update(label = label)
+        Session.objects.filter(id = object.id).update(label = label)
         journal_executor = JournalExecutor('JournalNote')
-        journal_executor.Execute(object,f"установлена метка:{label}")
+        journal_executor.Execute(object = object,label = f"установлена метка:{label}")
 

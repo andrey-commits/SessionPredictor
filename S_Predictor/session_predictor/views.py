@@ -9,6 +9,7 @@ from .resolvers.resolver_repository import RepositoryResolver
 from .executors.executor_label import LabelExecutor
 from .executors.executor_delete import DeleteExecutor
 from .executors.executor_session_data import DataExecutor
+from .executors.executor_session import SessionExecutor
 from .forms import SessionForm
 
 
@@ -45,13 +46,13 @@ def hauptview(request, errordata):
     if((set_label is not None) & (set_label!="")):
         label_executor = LabelExecutor('Session')
         for session in sessions:
-            label_executor.Execute(session.id,set_label)
+            label_executor.Execute(object = session,label = set_label)
         return redirect('hauptview', errordata = 0)
     deleter_apply = request.POST.get("delete")
     if(deleter_apply == "del"):
         delete_executor = DeleteExecutor('Session')
         for session in sessions:
-            delete_executor.Execute(session.id)
+            delete_executor.Execute(object = session)
         return redirect('hauptview', errordata=0)
     data['sessions'] = sessions
     return TemplateResponse(request,"HauptView.html",data)
@@ -91,6 +92,8 @@ def loaddata(request):
         with open(path, "wb+") as destination:
             destination.write(request.FILES['filedata'].read())
         label = request.POST.get('labeldata')
+        if(label is None):
+            label = ""
         executor = DataExecutor('Session')
         executor.Execute(path,label)
     except:
@@ -99,13 +102,15 @@ def loaddata(request):
 
 def sessionexecutor(request):
     operation =""
-    form = SessionForm()
+    select_session_id =-1
+    form = SessionForm(initial={'visit_number': 1})
     if(request.POST.get("operation_session")=="add"):
         operation = "Добавить сессию"
     if (request.POST.get("operation_session") == "redact"):
         operation = "Изменить сессию"
         repositoryResolver = RepositoryResolver()
         repository = repositoryResolver.GetHandler('sessions')
+        select_session_id = request.POST.get('select-session-id')
         session = repository.GetValue(request.POST.get('select-session-id'))
         form = SessionForm(initial={'label': session.label,
                                     'visit_number': session.visit_number,
@@ -118,6 +123,28 @@ def sessionexecutor(request):
                                     'geo_city': session.geo_city,
                                     'session_status': session.session_status})
     data = {"form" : form,
-            "operation" : operation }
+            "operation" : operation,
+            "select_session_id" : select_session_id}
     return TemplateResponse(request,"SessionView.html",data)
+
+def session_executor_apply(request):
+    data = {}
+    select_session_id = request.POST.get('select_session_id')
+    data["label"] = request.POST.get("label")
+    data["visit_number"] = request.POST.get("visit_number")
+    data["utm_source"] = request.POST.get("utm_source")
+    data["utm_medium"] = request.POST.get("utm_medium")
+    data["utm_campaign"] = request.POST.get("utm_campaign")
+    data["utm_adcontent"] = request.POST.get("utm_adcontent")
+    data["utm_keyword"] = request.POST.get("utm_keyword")
+    data["device_brand"] = request.POST.get("device_brand")
+    data["device_screen_resolution"] = request.POST.get("device_screen_resolution")
+    data["geo_city"] = request.POST.get("geo_city")
+    data["session_status"] = request.POST.get("session_status")
+    executor = SessionExecutor('Session')
+    executor.Execute(data, select_session_id)
+    return redirect('hauptview',errordata = 0)
+
+
+
 

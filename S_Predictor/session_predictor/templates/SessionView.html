@@ -1,10 +1,11 @@
 {% extends "BaseView.html" %}
 {% block content %}
-<form method="post" action="sessionexecutor/">
+<form method="post" action="session_executor_apply/">
   {% csrf_token %}
   <table>
   {{ form.as_table }}
   </table>
+  <input name="select_session_id" type="hidden" value="{{ select_session_id }}">
   <button type="submit" class="btn btn-outline-secondary">{{ operation }}</button>
 </form>
 {% endblock content %}
