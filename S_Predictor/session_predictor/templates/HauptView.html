@@ -25,6 +25,31 @@
   </div>
 </div>
 
+<div class="modal fade" tabindex="-1" id="sessionPredictor" aria-labelledby="dialog-title" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dialog-title-predict">Предикция текущей выборки</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Закрыть">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Осуществить предикцию текущей выборки? Предикция может занимать длительное время.
+      </div>
+      <div class="modal-footer">
+        <form method="post" action="">
+          {% csrf_token %}
+          <input name="prediction" type="hidden" value="predict">
+          <button type="submit" class="btn btn-outline-secondary">Да</button>
+        </form>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Нет</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="container-fluid w-100 g-0">
   <div class="row">
     <div class="col-12">
@@ -163,6 +188,8 @@
         <thead>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_metka" value="sort"><button class="header_session" type="submit">метка{{ sort_metka }}</button></form></th>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_date" value="sort"><button class="header_session" type="submit">дата{{ sort_date }}</button></form></th>
+                <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_session_status" value="sort"><button class="header_session" type="submit">session_status{{ sort_session_status }}</button></form></th>
+        <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_predict_session_status" value="sort"><button class="header_session" type="submit">predict_session_status{{ sort_predict_session_status }}</button></form></th>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_visit_number" value="sort"><button class="header_session" type="submit">visit_number{{ sort_visit_number }}</button></form></th>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_utm_source" value="sort"><button class="header_session" type="submit">utm_source{{ sort_utm_source }}</button></form></th>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_utm_medium" value="sort"><button class="header_session" type="submit">utm_medium{{ sort_utm_medium }}</button></form></th>
@@ -172,14 +199,15 @@
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_device_brand" value="sort"><button class="header_session" type="submit">device_brand{{ sort_device_brand }}</button></form></th>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_device_screen_resolution" value="sort"><button class="header_session" type="submit">device_screen_resolution{{ sort_device_screen_resolution }}</button></form></th>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_geo_city" value="sort"><button class="header_session" type="submit">geo_city{{ sort_geo_city }}</button></form></th>
-        <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_session_status" value="sort"><button class="header_session" type="submit">session_status{{ sort_session_status }}</button></form></th>
-        <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_predict_session_status" value="sort"><button class="header_session" type="submit">predict_session_status{{ sort_predict_session_status }}</button></form></th>
+
         </thead>
         <tbody>
           {% for session in sessions %}
             <tr>
               <td name="{{ session.id }}" class="session-row">{{ session.label }}</td>
               <td name="{{ session.id }}" class="session-row">{{ session.getDate }}</td>
+              <td name="{{ session.id }}" class="session-row">{{ session.session_status }}</td>
+              <td name="{{ session.id }}" class="session-row">{{ session.getPStatusView }}</td>
               <td name="{{ session.id }}" class="session-row">{{ session.visit_number }}</td>
               <td name="{{ session.id }}" class="session-row">{{ session.utm_source }}</td>
               <td name="{{ session.id }}" class="session-row">{{ session.utm_medium }}</td>
@@ -189,8 +217,7 @@
               <td name="{{ session.id }}" class="session-row">{{ session.device_brand }}</td>
               <td name="{{ session.id }}" class="session-row">{{ session.device_screen_resolution }}</td>
               <td name="{{ session.id }}" class="session-row">{{ session.geo_city }}</td>
-              <td name="{{ session.id }}" class="session-row">{{ session.session_status }}</td>
-              <td name="{{ session.id }}" class="session-row">{{ session.getPStatusView }}</td>
+
             </tr>
           {% endfor %}
         </tbody>
@@ -216,7 +243,7 @@
               <hr/>
             </li>
             <li>
-              <button type="button" class="btn btn-outline-secondary remotemenu">Предикция выборки</button>
+              <button type="submit" class="btn btn-outline-secondary remotemenu" data-bs-toggle="modal" data-bs-target="#sessionPredictor">Предикция выборки</button>
             </li>
             <li>
               <form method="post" action="sessionexecutor/">

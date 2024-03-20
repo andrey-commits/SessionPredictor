@@ -11,6 +11,7 @@ from .executors.executor_delete import DeleteExecutor
 from .executors.executor_session_data import DataExecutor
 from .executors.executor_session import SessionExecutor
 from .forms import SessionForm
+from .predictor.data_predictor import Predict
 
 
 def index(request):
@@ -53,6 +54,14 @@ def hauptview(request, errordata):
         delete_executor = DeleteExecutor('Session')
         for session in sessions:
             delete_executor.Execute(object = session)
+        return redirect('hauptview', errordata=0)
+    predictor_apply = request.POST.get("prediction")
+    if(predictor_apply =="predict"):
+        try:
+            list_sessions = list(sessions)
+            Predict(list_sessions)
+        except:
+            return redirect('hauptview', errordata=1)
         return redirect('hauptview', errordata=0)
     data['sessions'] = sessions
     return TemplateResponse(request,"HauptView.html",data)

@@ -20,16 +20,28 @@ class Session(models.Model):
     session_status = models.CharField(max_length=50,choices=RepositorySessionStatus('session_status').GetModifityValues(),blank=False)
     predict_session_status = models.CharField(max_length=50,choices=RepositorySessionStatus('predict_session_status').GetModifityValues(),null=True)
     delete_status = models.BooleanField(default=False)
-
     @property
     def getDate(self):
         return self.date.strftime('%d.%m.%Y')
-
     @property
     def getPStatusView(self):
         if(self.predict_session_status==None):
             return ""
         return self.predict_session_status
+
+    def to_dict(self):
+        return {
+            'visit_number':self.visit_number,
+            'utm_source':self.utm_source,
+            'utm_medium':self.utm_medium,
+            'utm_campaign':self.utm_campaign,
+            'utm_adcontent':self.utm_adcontent,
+            'utm_keyword':self.utm_keyword,
+            'device_brand':self.device_brand,
+            'device_screen_resolution':self.device_screen_resolution,
+            'geo_city':self.geo_city
+        }
+
 
 class JournalNote(models.Model):
     class Meta:
