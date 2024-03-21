@@ -183,12 +183,19 @@
     </div>
   <hr/>
   <div class="row">
-    <div class="col-10 haupt_table">
+    <div class="col-10">
+      <div class="row">
+        <div class="col-12">
+      <table style="font-size:12px;margin-left:10px;"><tr><td>Сессий в выборке: {{ n_sessions }}.</td><td><form method="post" action="">{% csrf_token %}<table style="font-size:12px;"><tr><td>Показано {{ menge_sessions }}, начиная с </td><td><input type="number" name="page_number" class="form-control" value = "{{ page_number }}"></td><td><button type="submit" class="btn btn-outline-secondary">Отобразить</button></td></tr></table></form></td></tr></table>
+      </div>
+        </div>
+      <div class="row">
+        <div class="col-12 haupt_table">
       <table id="sessions" class="table table_session" cellspacing="0" width="95%">
         <thead>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_metka" value="sort"><button class="header_session" type="submit">метка{{ sort_metka }}</button></form></th>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_date" value="sort"><button class="header_session" type="submit">дата{{ sort_date }}</button></form></th>
-                <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_session_status" value="sort"><button class="header_session" type="submit">session_status{{ sort_session_status }}</button></form></th>
+        <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_session_status" value="sort"><button class="header_session" type="submit">session_status{{ sort_session_status }}</button></form></th>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_predict_session_status" value="sort"><button class="header_session" type="submit">predict_session_status{{ sort_predict_session_status }}</button></form></th>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_visit_number" value="sort"><button class="header_session" type="submit">visit_number{{ sort_visit_number }}</button></form></th>
         <th scope="col"><form method="post" action="sorterexecutor/">{% csrf_token %}<input type="hidden" name="sort_utm_source" value="sort"><button class="header_session" type="submit">utm_source{{ sort_utm_source }}</button></form></th>
@@ -217,11 +224,12 @@
               <td name="{{ session.id }}" class="session-row">{{ session.device_brand }}</td>
               <td name="{{ session.id }}" class="session-row">{{ session.device_screen_resolution }}</td>
               <td name="{{ session.id }}" class="session-row">{{ session.geo_city }}</td>
-
             </tr>
           {% endfor %}
         </tbody>
       </table>
+          </div>
+      </div>
     </div>
      <div class="col-2">
        <ul class="header_ul">

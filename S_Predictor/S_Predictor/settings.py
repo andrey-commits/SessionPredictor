@@ -68,6 +68,8 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'S_Predictor.asgi.application'
+
 WSGI_APPLICATION = 'S_Predictor.wsgi.application'
 
 

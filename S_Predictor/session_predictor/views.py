@@ -1,3 +1,4 @@
+from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
@@ -14,8 +15,10 @@ from .forms import SessionForm
 from .predictor.data_predictor import Predict
 
 
+
 def index(request):
     return redirect('hauptview', errordata = 0)
+
 
 def hauptview(request, errordata):
     data = { "errordata" : errordata }
@@ -42,7 +45,7 @@ def hauptview(request, errordata):
                 if (data[f"sort_{field}"] == "⭡"):
                     sortparameters.append(f"-{field}")
     repository = repositoryResolver.GetHandler('sessions')
-    sessions = repository.GetValues(sortparameters = sortparameters,filterparameters = filterparameters)
+    sessions = repository.GetValues(sortparameters=sortparameters, filterparameters=filterparameters)
     set_label = request.POST.get("set_label")
     if((set_label is not None) & (set_label!="")):
         label_executor = LabelExecutor('Session')
@@ -63,7 +66,26 @@ def hauptview(request, errordata):
         except:
             return redirect('hauptview', errordata=1)
         return redirect('hauptview', errordata=0)
-    data['sessions'] = sessions
+
+    n_sessions = len(sessions)
+    page_number = 0
+    menge_sessions = 0
+    if (n_sessions<=500):
+        page_number = 0
+        menge_sessions = n_sessions
+    elif(n_sessions>500):
+        if((request.POST.get("page_number") is not None) and (request.POST.get("page_number") != 0)):
+            page_number = int(request.POST.get("page_number"))-1
+        if (page_number > n_sessions):
+            menge_sessions = 0
+        if((page_number+500) > n_sessions):
+            menge_sessions = n_sessions - page_number
+        if((page_number+500) <= n_sessions):
+            menge_sessions = 500
+    data['page_number'] = page_number+1
+    data['menge_sessions'] = menge_sessions
+    data['n_sessions'] = n_sessions
+    data['sessions'] = sessions[page_number:(page_number+500)]
     return TemplateResponse(request,"HauptView.html",data)
 
 def roc_aucview(request):
