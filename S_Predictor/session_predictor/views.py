@@ -1,4 +1,3 @@
-from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
@@ -61,12 +60,13 @@ def hauptview(request, errordata):
     predictor_apply = request.POST.get("prediction")
     if(predictor_apply =="predict"):
         try:
-            list_sessions = list(sessions)
-            Predict(list_sessions)
+            if(sessions.filter(predict_session_status__exact=None).exists()):
+                unpredict_sessions = sessions.filter(predict_session_status__exact=None)
+                list_sessions = list(unpredict_sessions)
+                Predict(list_sessions)
         except:
             return redirect('hauptview', errordata=1)
         return redirect('hauptview', errordata=0)
-
     n_sessions = len(sessions)
     page_number = 0
     menge_sessions = 0

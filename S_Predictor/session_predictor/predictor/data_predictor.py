@@ -59,6 +59,7 @@ def WritePrediction(sessions,result):
         Session.objects.filter(id = session.id).update(predict_session_status = session_status)
         journal_executor = JournalExecutor('session')
         journal_executor.Execute(object=session, label="сессия предиктирована")
+        index+=1
 
 get_data = FunctionTransformer(GetData)
 categorial_encoder = FunctionTransformer(Categorial_Encoder)
