@@ -1,5 +1,4 @@
 from .abstract_resolver import AbstractResolver
-from ..filters.abstract_filter import AbstractFilter
 from ..filters.filter_feature import FilterFeature
 from ..filters.filter_other import FilterOther
 from ..filters.filter_alternative import FilterAlternativeNumber

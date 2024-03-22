@@ -128,6 +128,8 @@ SORTERS_DATA = os.path.join(BASE_DIR,'session_predictor/sorters')
 
 LOAD_DATA = os.path.join(BASE_DIR,'session_predictor/uploads')
 
+PREDICTOR_DATA = os.path.join(BASE_DIR,'session_predictor/predictor')
+
 CSRF_TRUSTED_ORIGINS = [
     'https://appname.herokuapp.com'
 ]

@@ -7,7 +7,7 @@ from .abstract_repository import AbstractRepository
 class RepositoryFeature(AbstractRepository):
     def GetValues(self):
         connect = sqlite3.connect(os.path.join(settings.STATIC_ROOT,'categorial_features.db'))
-        data = pd.read_sql_query(f"SELECT Id,Name FROM {self.table} WHERE Name NOT IN ('negative_value','positive_value') ORDER BY Name",connect)
+        data = pd.read_sql_query(f"SELECT Id,Name FROM {self.table} WHERE Name NOT IN ('negative_value','positive_value','nan') ORDER BY Name",connect)
         connect.close()
         result = {}
         for index,row in data.iterrows():

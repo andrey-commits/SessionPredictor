@@ -12,7 +12,7 @@ from .executors.executor_session_data import DataExecutor
 from .executors.executor_session import SessionExecutor
 from .forms import SessionForm
 from .predictor.data_predictor import Predict
-
+from .predictor.data_roc_auc import MetricApply, GetMetricData
 
 
 def index(request):
@@ -74,7 +74,7 @@ def hauptview(request, errordata):
         page_number = 0
         menge_sessions = n_sessions
     elif(n_sessions>500):
-        if((request.POST.get("page_number") is not None) and (request.POST.get("page_number") != 0)):
+        if((request.POST.get("page_number") is not None) and (int(request.POST.get("page_number")) > 0)):
             page_number = int(request.POST.get("page_number"))-1
         if (page_number > n_sessions):
             menge_sessions = 0
@@ -89,7 +89,10 @@ def hauptview(request, errordata):
     return TemplateResponse(request,"HauptView.html",data)
 
 def roc_aucview(request):
-    return render(request,"Roc_AucView.html")
+    data = GetMetricData()
+    if(request.POST.get("metric_apply") == "apply"):
+        MetricApply()
+    return TemplateResponse(request,"Roc_AucView.html",data)
 
 def journalview(request):
     return render(request,"JournalView.html")

@@ -1,15 +1,19 @@
 {% extends "BaseView.html" %}
+{% load static %}
 {% block content %}
 <div class="container-fluid w-100">
   <div class="row">
-    <p>Значение метрики</p>
+    <div class="col-5">
+      <img src="{% static 'metric.jpg' %}" onerror="this.src='';" alt="метрика не определена">
     </div>
-  <div class="row">
-    <div class="col-9">
-      <p>Кривая Roc_Auc</p>
-    </div>
-     <div class="col-3">
-       <p>Кнопки управления</p>
+     <div class="col">
+       <form method="post" action="">
+         {% csrf_token %}
+         <div>Метрика Roc_Auc: {{ metric_value }}</div>
+         <div>Дата последнего определения метрики: {{ metric_date }}</div>
+         <input name="metric_apply" type="hidden" value="apply">
+         <button type="submit" class="btn btn-outline-secondary remotemenu">Определить метрику</button>
+       </form>
      </div>
     </div>
 </div>

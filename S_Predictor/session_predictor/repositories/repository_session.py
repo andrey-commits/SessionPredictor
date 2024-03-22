@@ -1,4 +1,3 @@
-import asyncio
 import datetime
 from .abstract_repository import AbstractRepository
 from ..models import Session
