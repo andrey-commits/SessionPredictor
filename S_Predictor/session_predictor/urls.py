@@ -15,6 +15,7 @@ urlpatterns = [
     path('hauptview/1/sessionexecutor/session_executor_apply/',views.session_executor_apply, name = 'session_executor_apply'),
     path('rocauc/',views.roc_aucview, name = 'roc_aucview'),
     path('journal/',views.journalview, name = 'journalview'),
+    path('journal/filterjournalexecutor/',views.filterjournalexecutor, name = 'filterjournalexecutor'),
     path('hauptview/<int:errordata>/',views.hauptview, name = 'hauptview'),
     path('', views.index, name='home')
 ]

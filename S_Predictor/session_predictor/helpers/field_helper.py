@@ -15,4 +15,5 @@ class FieldHelper:
                 'geo_city',
                 'begin_date',
                 'end_date',
-                'date']
+                'date',
+                'operation']

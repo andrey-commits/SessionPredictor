@@ -28,8 +28,8 @@ class FilterAlternativeNumber(AbstractFilter):
             tree.write(f"{settings.FILTERS_DATA}/FiltersData.xml")
 
 class FilterAlternativeDate(AbstractFilter):
-    def FilterInit(self):
-        tree = ET.parse(f"{settings.FILTERS_DATA}/FiltersData.xml")
+    def FilterInit(self,storage ="FiltersData.xml"):
+        tree = ET.parse(f"{settings.FILTERS_DATA}/{storage}")
         root = tree.getroot()
         try:
             result = datetime.datetime.strptime(root.find(f"{self.field}").text, '%Y-%m-%d').date()
@@ -37,8 +37,8 @@ class FilterAlternativeDate(AbstractFilter):
             return ""
         return str(result)
 
-    def FilterApply(self, value):
-        tree = ET.parse(f"{settings.FILTERS_DATA}/FiltersData.xml")
+    def FilterApply(self, value, storage ="FiltersData.xml"):
+        tree = ET.parse(f"{settings.FILTERS_DATA}/{storage}")
         root = tree.getroot()
         node = root.find(f"{self.field}")
         try:
@@ -47,4 +47,4 @@ class FilterAlternativeDate(AbstractFilter):
             return
         if (node.text != value):
             node.text = value
-            tree.write(f"{settings.FILTERS_DATA}/FiltersData.xml")
+            tree.write(f"{settings.FILTERS_DATA}/{storage}")

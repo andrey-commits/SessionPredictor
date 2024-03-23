@@ -3,15 +3,9 @@ from ..repositories.repository_feature import RepositoryFeature
 from ..repositories.repository_session_status import RepositorySessionStatus
 from ..repositories.repository_session import RepositorySession
 from ..repositories.repository_metka import RepositoryMetka
-from ..repositories.abstract_repository import AbstractRepository
-['metka',
+from ..repositories.repository_journal import RepositoryJournals
 
-'visit_number',
-                'begin_date',
-                'end_date',
-                'date']
 class RepositoryResolver(AbstractResolver):
-
     def GetHandler(self,field):
         if field in ['metka']:
             return RepositoryMetka('metka')

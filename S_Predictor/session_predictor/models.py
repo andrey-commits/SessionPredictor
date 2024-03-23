@@ -52,4 +52,7 @@ class JournalNote(models.Model):
     session_date = models.DateField()
     date = models.DateField(auto_now_add=True)
     operation = models.TextField(default="операция не установлена")
+    @property
+    def getDate(self):
+        return self.date.strftime('%d.%m.%Y')
 

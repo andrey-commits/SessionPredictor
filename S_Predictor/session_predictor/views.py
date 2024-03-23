@@ -4,6 +4,8 @@ from django.template.response import TemplateResponse
 from .helpers.filter_helper import FilterCleaner
 from .helpers.field_helper import FieldHelper
 from .resolvers.resolver_filter import FilterResolver
+from .resolvers.resolver_journal_filter import FilterJournalResolver
+from .resolvers.resolver_journal_repository import RepositoryJournalResolver
 from .resolvers.resolver_sorter import SortResolver
 from .resolvers.resolver_repository import RepositoryResolver
 from .executors.executor_label import LabelExecutor
@@ -86,6 +88,7 @@ def hauptview(request, errordata):
     data['menge_sessions'] = menge_sessions
     data['n_sessions'] = n_sessions
     data['sessions'] = sessions[page_number:(page_number+500)]
+    print(data['metka_values'])
     return TemplateResponse(request,"HauptView.html",data)
 
 def roc_aucview(request):
@@ -95,7 +98,41 @@ def roc_aucview(request):
     return TemplateResponse(request,"Roc_AucView.html",data)
 
 def journalview(request):
-    return render(request,"JournalView.html")
+    data = {}
+    filterparameters = {}
+    filterResolver = FilterJournalResolver()
+    repositoryResolver = RepositoryJournalResolver()
+    for field in FieldHelper.GetFields():
+        filter = filterResolver.GetHandler(field)
+        repository = repositoryResolver.GetHandler(field)
+        if (repository is not None):
+            data[f"{field}_values"] = repository.GetValues()
+        if (filter is not None):
+            data[f"{field}_filter_value"] = filter.FilterInit("FiltersJournalData.xml")
+            if ((data[f"{field}_filter_value"] is not None) & ((data[f"{field}_filter_value"] != ""))):
+                filterparameters[f"{field}"] = data[f"{field}_filter_value"]
+    repository = repositoryResolver.GetHandler('journals')
+    journals = repository.GetValues(filterparameters=filterparameters)
+    n_journals = len(journals)
+    page_journal_number = 0
+    menge_journals = 0
+    if (n_journals <= 500):
+        page_journal_number = 0
+        menge_journals = n_journals
+    elif (n_journals > 500):
+        if ((request.POST.get("page_journal_number") is not None) and (int(request.POST.get("page_journal_number")) > 0)):
+            page_journal_number = int(request.POST.get("page_journal_number")) - 1
+        if (page_journal_number > n_journals):
+            menge_journals = 0
+        if ((page_journal_number + 500) > n_journals):
+            menge_journals = n_journals - page_journal_number
+        if ((page_journal_number + 500) <= n_journals):
+            menge_journals = 500
+    data['page_journal_number'] = page_journal_number + 1
+    data['menge_journals'] = menge_journals
+    data['n_journals'] = n_journals
+    data['journals'] = journals[page_journal_number:(page_journal_number + 500)]
+    return TemplateResponse(request, "JournalView.html", data)
 
 def filterexecutor(request):
     filterResolver = FilterResolver()
@@ -105,6 +142,15 @@ def filterexecutor(request):
         if(filter is not None):
             filter.FilterApply(value)
     return redirect('hauptview', errordata = 0)
+
+def filterjournalexecutor(request):
+    filterResolver = FilterJournalResolver()
+    for field in FieldHelper.GetFields():
+        value = request.POST.get(field)
+        filter = filterResolver.GetHandler(field)
+        if(filter is not None):
+            filter.FilterApply(value,"FiltersJournalData.xml")
+    return redirect('journalview')
 
 def filtercleaner(request):
     FilterCleaner()

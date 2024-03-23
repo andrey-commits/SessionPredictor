@@ -2,15 +2,73 @@
 {% block content %}
 <div class="container-fluid w-100">
   <div class="row h-30">
-    <p>Панель фильтров</p>
+    <div class="col-12">
+      <form method="post" action="filterjournalexecutor/">
+        {% csrf_token %}
+      <table class="filter_table">
+        <tr>
+          <td>
+            <label for="metkaDatalist" class="form-label">метка</label>
+            <input class="form-control" list="datalistmetka" name="metka" id="metkaDatalist" placeholder="Введите метку" value = "{{ metka_filter_value }}"/>
+            <datalist id="datalistmetka">
+              {% for vf in metka_values %}
+              <option>{{ vf }}</option>
+              {% endfor %}
+            </datalist>
+          </td>
+        <td>
+            <label class="form-label" for="date_begin">запись после</label>
+            <input type="date" name="begin_date" id="date_begin" class="form-control" value = "{{ begin_date_filter_value }}">
+          </td>
+          <td>
+            <label class="form-label" for="date_end">запись до</label>
+            <input type="date" name="end_date" id="date_end" class="form-control" value = "{{ end_date_filter_value }}">
+          </td>
+          <td>
+        <td>
+            <label for="operationDatalist" class="form-label">операция</label>
+            <input class="form-control" list="datalistoperation" name="operation" id="operationDatalist" placeholder="Введите операцию" value = "{{ operation_filter_value }}"/>
+            <datalist id="datalistoperation">
+              {% for vf in operation_values %}
+              <option>{{ vf }}</option>
+              {% endfor %}
+            </datalist>
+          </td>
+        <td class="filter_button">
+            <button type="submit" class="btn btn-outline-secondary">Применить фильтр</button>
+          </td>
+        </tr>
+      </table>
+      </form>
+      </div>
     </div>
+    <hr/>
   <div class="row">
-    <div class="col-9">
-      <p>Журнал предиктора</p>
+      <div class="col-12">
+      <table style="font-size:12px;margin-left:10px;"><tr><td>Записей в журнале: {{ n_journals }}.</td><td><form method="post" action="">{% csrf_token %}<table style="font-size:12px;"><tr><td>Показано {{ menge_journals }}, начиная с </td><td><input type="number" name="page_journal_number" class="form-control" value = "{{ page_journal_number }}"></td><td><button type="submit" class="btn btn-outline-secondary">Отобразить</button></td></tr></table></form></td></tr></table>
+      </div>
     </div>
-     <div class="col-3">
-       <p>Кнопки управления</p>
-     </div>
-    </div>
+   <div class="row">
+        <div class="col-12 haupt_table">
+      <table id="journals" class="table table_session" cellspacing="0" width="95%">
+        <thead>
+        <th scope="col" style="font-weight: normal;">метка</th>
+        <th scope="col" style="font-weight: normal;">дата операции</button></form></th>
+        <th scope="col" style="font-weight: normal;">дата сессии</th>
+        <th scope="col" style="font-weight: normal;">операция</th>
+        </thead>
+        <tbody>
+          {% for journal in journals %}
+            <tr>
+              <td>{{ journal.session_label }}</td>
+              <td>{{ journal.getDate }}</td>
+              <td>{{ journal.session_date }}</td>
+              <td>{{ journal.operation }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+          </div>
+      </div>
 </div>
 {% endblock %}
